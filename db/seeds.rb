@@ -24,12 +24,14 @@ team = Team.create!(
 user_transaction = Transaction.create!(
   amount: 10000,
   transaction_type: :credit,
-  source_wallet_id: user.id
+  source_wallet_id: team.id,
+  target_wallet_id: user.id,
 )
 
 # create initial team transaction
 team_transaction = Transaction.create!(
   amount: 10000,
   transaction_type: :credit,
-  source_wallet_id: team.id
+  source_wallet_id: user.id,
+  target_wallet_id: team.id
 )
