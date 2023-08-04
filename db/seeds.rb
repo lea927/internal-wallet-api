@@ -12,12 +12,14 @@
 user = User.create!(
   username: 'user1',
   password_digest: 'p@ssword123',
+  account_number: '12345'
 )
 
 # create team
 team = Team.create!(
   team_name: 'team1',
-  users: [user]
+  users: [user],
+  account_number: '56789'
 )
 
 # create initial user transaction
@@ -26,6 +28,7 @@ user_transaction = Transaction.create!(
   transaction_type: :credit,
   source_wallet_id: team.id,
   target_wallet_id: user.id,
+  user: user,
 )
 
 # create initial team transaction
@@ -33,5 +36,6 @@ team_transaction = Transaction.create!(
   amount: 10000,
   transaction_type: :credit,
   source_wallet_id: user.id,
-  target_wallet_id: team.id
+  target_wallet_id: team.id,
+  team: team,
 )
