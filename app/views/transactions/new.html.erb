@@ -1,0 +1,25 @@
+<h1>Send Money</h1>
+
+<% if flash[:alert] %>
+  <p><%= flash[:alert] %></p>
+<% end %>
+
+<%= form_for @transaction do |f| %>
+  <div>
+    <%= f.label :source_account_number %>
+    <%= f.number_field :source_account_number %>
+  </div>
+  <div>
+    <%= f.label :amount %>
+    <%= f.number_field :amount %>
+  </div>
+  <div>
+    <%= f.label :account_number %>
+    <%= f.number_field :target_account_number %>
+  </div>
+
+  <div>
+    <%= f.submit 'Send Money' %>
+  </div>
+<% end %>
+
