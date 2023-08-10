@@ -18,8 +18,8 @@ class TransactionsController < ApplicationController
     @target_account = Transaction.find_user_or_team(target_account_number)
 
     if account_exists
-      @transaction.target_wallet_id = target_account_number
-      @transaction.source_wallet_id = source_account_number
+      @transaction.target_wallet_account_no = target_account_number
+      @transaction.source_wallet_account_no = source_account_number
       @transaction.transaction_type = :credit
       if source_account.kind_of?(User)
         @transaction.user_id = source_account.id
@@ -52,8 +52,8 @@ class TransactionsController < ApplicationController
 
     debit_transaction = Transaction.new({
                                           amount: @transaction.amount,
-                                          target_wallet_id: @transaction.source_wallet_id,
-                                          source_wallet_id: @transaction.target_wallet_id,
+                                          target_wallet_account_no: @transaction.source_wallet_account_no,
+                                          source_wallet_account_no: @transaction.target_wallet_account_no,
                                           transaction_type: :debit
                                         })
 

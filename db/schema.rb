@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_04_145106) do
+ActiveRecord::Schema.define(version: 2023_08_10_175019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(version: 2023_08_04_145106) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "team_id"
-    t.integer "source_wallet_id", null: false
-    t.integer "target_wallet_id", null: false
+    t.string "source_wallet_account_no", null: false
+    t.string "target_wallet_account_no", null: false
     t.index ["team_id"], name: "index_transactions_on_team_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
