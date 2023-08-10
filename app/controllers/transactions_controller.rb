@@ -1,4 +1,5 @@
 class TransactionsController < ApplicationController
+  after_action :create_debit_transaction, only: [:create]
   def new
     @transaction = Transaction.new
   end
@@ -32,6 +33,21 @@ class TransactionsController < ApplicationController
   end
 
   private
+  
+  def create_debit_transaction
+    return unless @transaction.persisted?
+
+    debit_transaction = Transaction.new({
+                                          amount: @transaction.amount,
+                                          target_wallet_id: @transaction.source_wallet_id,
+                                          source_wallet_id: @transaction.target_wallet_id,
+                                          transaction_type: :debit
+                                        })
+
+    unless debit_transaction.save
+      Rails.logger.error("Failed to create corresponding debit transaction for Transaction ID: #{@transaction.id}")
+    end
+  end
 
   def transaction_params
     params.require(:transaction).permit(:amount)
