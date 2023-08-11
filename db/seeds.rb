@@ -17,7 +17,8 @@ user = User.create!(
 team = Team.create!(
   team_name: 'team1',
   users: [user],
-  account_number: '67890'
+  account_number: '67890',
+  password_digest: 'p@ssword123',
 )
 
 stock = Stock.create!(
