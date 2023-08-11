@@ -8,34 +8,46 @@
 
 # db/seeds.rb
 
-# create user
 user = User.create!(
   username: 'user1',
   password_digest: 'p@ssword123',
   account_number: '12345'
 )
 
-# create team
 team = Team.create!(
   team_name: 'team1',
   users: [user],
-  account_number: '56789'
+  account_number: '67890'
 )
 
-# create initial user transaction
-user_transaction = Transaction.create!(
+user_credit_transaction = Transaction.create!(
   amount: 10000,
   transaction_type: :credit,
-  source_wallet_account_no: team.id,
-  target_wallet_account_no: user.id,
-  user: user,
+  source_wallet_account_no: '67890',
+  target_wallet_account_no: '12345',
+  user_id: user.id,
 )
 
-# create initial team transaction
-team_transaction = Transaction.create!(
+user_debit_transaction = Transaction.create!(
+  amount: 100,
+  transaction_type: :debit,
+  source_wallet_account_no: '67890',
+  target_wallet_account_no: '12345',
+  user_id: user.id,
+)
+
+team_credit_transaction = Transaction.create!(
   amount: 10000,
   transaction_type: :credit,
-  source_wallet_account_no: user.id,
-  target_wallet_account_no: team.id,
-  team: team,
+  source_wallet_account_no: '12345',
+  target_wallet_account_no: '67890',
+  team_id: team.id,
 )
+
+team_debit_transaction = Transaction.create!(
+  amount: 100,
+  transaction_type: :debit,
+  source_wallet_account_no: '12345',
+  target_wallet_account_no: '67890',
+  team_id: team.id,
+  )

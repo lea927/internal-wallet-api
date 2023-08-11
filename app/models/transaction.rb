@@ -34,4 +34,11 @@ class Transaction < ApplicationRecord
 
     account
   end
+
+  def self.calculate_balance_for(user)
+    credit_amount = where(user: user, transaction_type: :credit).sum(:amount)
+    debit_amount = where(user: user, transaction_type: :debit).sum(:amount)
+
+    credit_amount - debit_amount
+  end
 end

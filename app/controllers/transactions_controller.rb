@@ -1,5 +1,5 @@
 class TransactionsController < ApplicationController
-  after_action :create_debit_transaction, only: [:create]
+  after_action :create_credit_transaction, only: [:create]
   def new
     @transaction = Transaction.new
   end
@@ -20,7 +20,7 @@ class TransactionsController < ApplicationController
     if account_exists
       @transaction.target_wallet_account_no = target_account_number
       @transaction.source_wallet_account_no = source_account_number
-      @transaction.transaction_type = :credit
+      @transaction.transaction_type = :debit
       if source_account.kind_of?(User)
         @transaction.user_id = source_account.id
       else
@@ -41,7 +41,7 @@ class TransactionsController < ApplicationController
 
   private
 
-  def create_debit_transaction
+  def create_credit_transaction
     return unless @transaction.persisted?
 
     if @target_account.kind_of?(User)
@@ -52,9 +52,9 @@ class TransactionsController < ApplicationController
 
     debit_transaction = Transaction.new({
                                           amount: @transaction.amount,
-                                          target_wallet_account_no: @transaction.source_wallet_account_no,
-                                          source_wallet_account_no: @transaction.target_wallet_account_no,
-                                          transaction_type: :debit
+                                          target_wallet_account_no: @transaction.target_wallet_account_no,
+                                          source_wallet_account_no: @transaction.source_wallet_account_no,
+                                          transaction_type: :credit
                                         })
 
     if @target_account.kind_of?(User)

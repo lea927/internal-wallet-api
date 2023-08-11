@@ -1,6 +1,9 @@
 <p>
   <strong>Username:</strong>
   <%= @user.username %>
+  <strong>Running balance:</strong>
+  <%= number_to_currency(@balance, unit: "") %>
+
   <div>
     <%= link_to "Send Money", new_transaction_path %>
   </div>
