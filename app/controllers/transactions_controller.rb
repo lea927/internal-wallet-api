@@ -78,7 +78,7 @@ class TransactionsController < ApplicationController
       @transaction.team_id = @target_account.id
     end
 
-    debit_transaction = Transaction.new({
+    credit_transaction = Transaction.new({
                                           amount: @transaction.amount,
                                           target_wallet_account_no: @transaction.target_wallet_account_no,
                                           source_wallet_account_no: @transaction.source_wallet_account_no,
@@ -86,13 +86,13 @@ class TransactionsController < ApplicationController
                                         })
 
     if @target_account.kind_of?(User)
-      debit_transaction.user_id = @transaction.user_id
+      credit_transaction.user_id = @transaction.user_id
     else
-      debit_transaction.team_id = @transaction.team_id
+      credit_transaction.team_id = @transaction.team_id
     end
 
-    unless debit_transaction.save
-      Rails.logger.error("Failed to create corresponding debit transaction for Transaction ID: #{@transaction.id}")
+    unless credit_transaction.save
+      Rails.logger.error("Failed to create corresponding credit transaction for Transaction ID: #{@transaction.id}")
     end
   end
 
