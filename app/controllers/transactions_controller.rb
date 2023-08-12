@@ -44,9 +44,13 @@ class TransactionsController < ApplicationController
     target_account_exists = Transaction.account_exists?(target_account_number)
     @target_account = Transaction.find_account(target_account_number)
     amount_exceeds_balance = Transaction.amount_exceeds_balance(@transaction.amount,current_user)
+    transferring_to_self = Transaction.transferring_to_self(current_user, @target_account)
 
     if amount_exceeds_balance
       flash[:alert] = "Amount exceeds your current balance. Please try again."
+      render :new
+    elsif target_account_exists && transferring_to_self
+      flash[:alert] = "Transferring money to the same account is not allowed. Please enter a different account number."
       render :new
     else
       if target_account_exists

@@ -7,6 +7,10 @@ class Transaction < ApplicationRecord
 
   validates :amount, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: 10000 }
 
+  def self.transferring_to_self(source_account, destination_account)
+    return source_account == destination_account
+  end
+
   def self.amount_exceeds_balance(amount, current_user)
     return amount > Transaction.calculate_balance_for(current_user)
   end
