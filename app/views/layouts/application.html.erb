@@ -10,7 +10,10 @@
   </head>
 
   <body>
-    <%= render 'layouts/navbar' %>
+    <% unless hide_navbar? %>
+      <%= render 'layouts/navbar' %>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>

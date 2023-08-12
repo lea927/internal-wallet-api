@@ -3,5 +3,6 @@
     <li><%= link_to 'Dashboard', root_path %></li>
     <li><%= link_to 'Send Money', new_transaction_path %></li>
     <li><%= link_to 'Withdraw Money', withdraw_form_transactions_path %></li>
+    <li><%= link_to "Log Out", session_path, method: :delete %></li>
   </ul>
 </nav>

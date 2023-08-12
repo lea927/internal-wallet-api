@@ -15,5 +15,13 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    session[:user_id] = nil
+    flash[:notice] = "You've been logged out successfully."
+    redirect_to root_path
+  end
+
+  private
+  def hide_navbar?
+    action_name == "new"
   end
 end
