@@ -18,7 +18,7 @@ class TransactionsController < ApplicationController
     @transaction.transaction_type = :debit
     source_account_number = params[:transaction]['source_account_number']
     account_exists = Transaction.account_exists?(source_account_number)
-    source_account = Transaction.find_user_or_team(source_account_number)
+    source_account = Transaction.find_account(source_account_number)
 
     if account_exists
       @transaction.source_wallet_account_no = source_account_number
@@ -40,20 +40,20 @@ class TransactionsController < ApplicationController
   def create
     @transaction = Transaction.new(transaction_params)
     target_account_number = params[:transaction]['target_account_number']
-    source_account_number = params[:transaction]['source_account_number']
+    source_account = current_user
+    target_account_exists = Transaction.account_exists?(target_account_number)
+    @target_account = Transaction.find_account(target_account_number)
 
-    account_exists = Transaction.account_exists?(target_account_number)
-    source_account = Transaction.find_user_or_team(source_account_number)
-    @target_account = Transaction.find_user_or_team(target_account_number)
-
-    if account_exists
+    if target_account_exists
       @transaction.target_wallet_account_no = target_account_number
-      @transaction.source_wallet_account_no = source_account_number
+      @transaction.source_wallet_account_no = source_account.account_number
       @transaction.transaction_type = :debit
       if source_account.kind_of?(User)
         @transaction.user_id = source_account.id
-      else
+      elsif source_account.kind_of?(Team)
         @transaction.team_id = source_account.id
+      else
+        @transaction.stock_id = source_account.id
       end
       if @transaction.save
         redirect_to @transaction
@@ -75,8 +75,10 @@ class TransactionsController < ApplicationController
 
     if @target_account.kind_of?(User)
       @transaction.user_id = @target_account.id
-    else
+    elsif @target_account.kind_of?(Team)
       @transaction.team_id = @target_account.id
+    else
+      @transaction.stock_id = @target_account.id
     end
 
     credit_transaction = Transaction.new({
@@ -88,8 +90,10 @@ class TransactionsController < ApplicationController
 
     if @target_account.kind_of?(User)
       credit_transaction.user_id = @transaction.user_id
-    else
+    elsif @target_account.kind_of?(Team)
       credit_transaction.team_id = @transaction.team_id
+    else
+      credit_transaction.stock_id = @transaction.stock_id
     end
 
     unless credit_transaction.save

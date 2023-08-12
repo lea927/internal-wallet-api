@@ -7,32 +7,24 @@ class Transaction < ApplicationRecord
   enum transaction_type: { credit: 0, debit: 1 }
 
   def self.account_exists?(account_number)
-    result = false
-    user = User.where(account_number: account_number).first
-    if user.present?
-      result = true
-    end
+    return true if User.find_by(account_number: account_number).present?
+    return true if Team.find_by(account_number: account_number).present?
+    return true if Stock.find_by(account_number: account_number).present?
 
-    team = Team.where(account_number: account_number).first
-    if team.present?
-      result = true
-    end
-
-    result
+    false
   end
 
-  def self.find_user_or_team(account_number)
-    user = User.where(account_number: account_number).first
-    if user.present?
-      account = user
-    end
+  def self.find_account(account_number)
+    user = User.find_by(account_number: account_number)
+    return user if user.present?
 
-    team = Team.where(account_number: account_number).first
-    if team.present?
-      account = team
-    end
+    team = Team.find_by(account_number: account_number)
+    return team if team.present?
 
-    account
+    stock = Stock.find_by(account_number: account_number)
+    return stock if stock.present?
+
+    nil
   end
 
   def self.calculate_balance_for(user)
