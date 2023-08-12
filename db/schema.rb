@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_12_123940) do
+ActiveRecord::Schema.define(version: 2023_08_12_131337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2023_08_12_123940) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "account_number"
     t.integer "user_type"
+    t.string "salt"
   end
 
   add_foreign_key "transactions", "users"

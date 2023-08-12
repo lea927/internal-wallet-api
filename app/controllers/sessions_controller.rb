@@ -3,13 +3,24 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by(username: params[:username], password_digest: params[:password])
+    input_password = params[:password]
+    user = User.find_by(username: params[:username])
 
     if user
-      session[:user_id] = user.id
-      redirect_to root_path, notice: "Logged in successfully!"
+      user_salt = user.salt
+      user_hashed_password = user.password_digest
+
+      hashed_input_password = Digest::SHA256.hexdigest(input_password + user_salt)
+
+      if hashed_input_password == user_hashed_password
+        session[:user_id] = user.id
+        redirect_to root_path, notice: "Logged in successfully!"
+      else
+        flash.now[:alert] = "Invalid password."
+        render :new
+      end
     else
-      flash.now[:alert] = "Invalid username or password."
+      flash.now[:alert] = "Invalid username"
       render :new
     end
   end
