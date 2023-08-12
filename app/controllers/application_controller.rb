@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   def root_redirect
     if current_user
-      redirect_to user_path(current_user)
+      redirect_to user_profile_path(current_user)
     else
       redirect_to login_path
     end
