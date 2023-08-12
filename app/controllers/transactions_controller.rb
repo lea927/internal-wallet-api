@@ -1,5 +1,6 @@
 class TransactionsController < ApplicationController
   after_action :create_credit_transaction, only: [:create]
+  before_action :authenticate_user!, only: [:new, :withdraw_form]
   def new
     @transaction = Transaction.new
   end

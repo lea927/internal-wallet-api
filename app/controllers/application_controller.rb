@@ -16,4 +16,10 @@ class ApplicationController < ActionController::Base
       redirect_to new_session_path
     end
   end
+
+  protected
+
+  def authenticate_user!
+    redirect_to new_session_path, alert: "You need to sign in first!" unless current_user
+  end
 end
