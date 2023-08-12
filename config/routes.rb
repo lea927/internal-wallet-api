@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resource :session, only: [:new, :create, :destroy], path_names: { new: 'login' }
+  get 'login', to: 'sessions#new', as: 'login'
+  resource :session, only: [:create, :destroy]
+
   resources :users, only: [:show]
   resources :transactions, only: [:create, :new, :show] do
     collection do

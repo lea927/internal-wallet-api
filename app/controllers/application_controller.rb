@@ -13,13 +13,13 @@ class ApplicationController < ActionController::Base
     if current_user
       redirect_to user_path(current_user)
     else
-      redirect_to new_session_path
+      redirect_to login_path
     end
   end
 
   protected
 
   def authenticate_user!
-    redirect_to new_session_path, alert: "You need to sign in first!" unless current_user
+    redirect_to login_path, alert: "You need to sign in first!" unless current_user
   end
 end
