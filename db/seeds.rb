@@ -2,7 +2,7 @@ require 'digest'
 
 10.times do |i|
   username = "user#{i + 1}"
-  account_number = rand(10000..99999).to_s
+  account_number = rand(10**11..(10**12)-1).to_s
   salt = SecureRandom.hex
   hashed_password = Digest::SHA256.hexdigest("#{ENV['SEED_USER_PASSWORD']}#{salt}")
   type =
