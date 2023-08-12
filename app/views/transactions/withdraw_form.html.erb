@@ -1,9 +1,5 @@
 <%= form_with model: @transaction, url: withdraw_transactions_path, local: true do |f| %>
   <div>
-    <%= f.label :source_account_number %>
-    <%= f.number_field :source_account_number %>
-  </div>
-  <div>
     <%= f.label :amount %>
     <%= f.number_field :amount %>
   </div>

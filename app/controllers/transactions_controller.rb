@@ -16,24 +16,20 @@ class TransactionsController < ApplicationController
   def withdraw
     @transaction = Transaction.new(transaction_params)
     @transaction.transaction_type = :debit
-    source_account_number = params[:transaction]['source_account_number']
-    account_exists = Transaction.account_exists?(source_account_number)
-    source_account = Transaction.find_account(source_account_number)
+    @transaction.source_wallet_account_no = current_user.account_number
+    @transaction.target_wallet_account_no = current_user.account_number
 
-    if account_exists
-      @transaction.source_wallet_account_no = source_account_number
-      @transaction.target_wallet_account_no = source_account_number
-
-      if source_account.kind_of?(User)
-        @transaction.user_id = source_account.id
-      else
-        @transaction.team_id = source_account.id
-      end
-      if @transaction.save
-        redirect_to @transaction, notice: 'Withdrawal successful!'
-      else
-        render :withdraw_form
-      end
+    if current_user.kind_of?(User)
+      @transaction.user_id = current_user.id
+    elsif current_user.kind_of?(Team)
+      @transaction.team_id = current_user.id
+    else
+      @transaction.stock_id = current_user.id
+    end
+    if @transaction.save
+      redirect_to @transaction, notice: 'Withdrawal successful!'
+    else
+      render :withdraw_form
     end
   end
 
