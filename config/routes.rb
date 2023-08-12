@@ -7,4 +7,6 @@ Rails.application.routes.draw do
       post 'withdraw'
     end
   end
+
+  root to: "application#root_redirect"
 end
