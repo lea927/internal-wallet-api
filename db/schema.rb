@@ -10,26 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_11_184731) do
+ActiveRecord::Schema.define(version: 2023_08_12_121214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "stocks", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "username"
-    t.string "password_digest"
-    t.string "account_number"
-  end
-
-  create_table "teams", force: :cascade do |t|
-    t.string "team_name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "account_number"
-    t.string "password_digest"
-  end
 
   create_table "transactions", force: :cascade do |t|
     t.bigint "user_id"
@@ -37,12 +21,8 @@ ActiveRecord::Schema.define(version: 2023_08_11_184731) do
     t.integer "transaction_type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "team_id"
     t.string "source_wallet_account_no", null: false
     t.string "target_wallet_account_no", null: false
-    t.bigint "stock_id"
-    t.index ["stock_id"], name: "index_transactions_on_stock_id"
-    t.index ["team_id"], name: "index_transactions_on_team_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
@@ -51,13 +31,8 @@ ActiveRecord::Schema.define(version: 2023_08_11_184731) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "team_id"
     t.string "account_number"
-    t.index ["team_id"], name: "index_users_on_team_id"
   end
 
-  add_foreign_key "transactions", "stocks"
-  add_foreign_key "transactions", "teams"
   add_foreign_key "transactions", "users"
-  add_foreign_key "users", "teams"
 end
