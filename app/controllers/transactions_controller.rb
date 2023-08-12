@@ -21,10 +21,6 @@ class TransactionsController < ApplicationController
 
     if current_user.kind_of?(User)
       @transaction.user_id = current_user.id
-    elsif current_user.kind_of?(Team)
-      @transaction.team_id = current_user.id
-    else
-      @transaction.stock_id = current_user.id
     end
     if @transaction.save
       redirect_to @transaction, notice: 'Withdrawal successful!'
@@ -46,10 +42,6 @@ class TransactionsController < ApplicationController
       @transaction.transaction_type = :debit
       if source_account.kind_of?(User)
         @transaction.user_id = source_account.id
-      elsif source_account.kind_of?(Team)
-        @transaction.team_id = source_account.id
-      else
-        @transaction.stock_id = source_account.id
       end
       if @transaction.save
         redirect_to @transaction
@@ -71,10 +63,6 @@ class TransactionsController < ApplicationController
 
     if @target_account.kind_of?(User)
       @transaction.user_id = @target_account.id
-    elsif @target_account.kind_of?(Team)
-      @transaction.team_id = @target_account.id
-    else
-      @transaction.stock_id = @target_account.id
     end
 
     credit_transaction = Transaction.new({
@@ -86,10 +74,6 @@ class TransactionsController < ApplicationController
 
     if @target_account.kind_of?(User)
       credit_transaction.user_id = @transaction.user_id
-    elsif @target_account.kind_of?(Team)
-      credit_transaction.team_id = @transaction.team_id
-    else
-      credit_transaction.stock_id = @transaction.stock_id
     end
 
     unless credit_transaction.save
