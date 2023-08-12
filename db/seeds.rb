@@ -8,24 +8,38 @@
 
 # db/seeds.rb
 
-user = User.create!(
-  username: 'user1',
-  password_digest: 'p@ssword123',
-  account_number: '12345'
-)
+10.times do |i|
+  username = "user#{i + 1}"
+  account_number = rand(10000..99999).to_s
+  type =
+    if i < 3
+      :user
+    elsif i < 6
+      :team
+    else
+      :stock
+    end
 
-user_credit_transaction = Transaction.create!(
-  amount: 10000,
-  transaction_type: :credit,
-  source_wallet_account_no: '67890',
-  target_wallet_account_no: '12345',
-  user_id: user.id,
-)
+  user = User.create!(
+    username: username,
+    password_digest: ENV['SEED_USER_PASSWORD'],
+    user_type: type,
+    account_number: account_number
+  )
 
-user_debit_transaction = Transaction.create!(
-  amount: 100,
-  transaction_type: :debit,
-  source_wallet_account_no: '67890',
-  target_wallet_account_no: '12345',
-  user_id: user.id,
-)
+  Transaction.create!(
+    amount: 10000,
+    transaction_type: :credit,
+    source_wallet_account_no: '',
+    target_wallet_account_no: user.account_number,
+    user_id: user.id,
+    )
+
+  Transaction.create!(
+    amount: 100,
+    transaction_type: :debit,
+    source_wallet_account_no: '',
+    target_wallet_account_no: user.account_number,
+    user_id: user.id,
+    )
+end
