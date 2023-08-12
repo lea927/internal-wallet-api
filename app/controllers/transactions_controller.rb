@@ -19,14 +19,22 @@ class TransactionsController < ApplicationController
     @transaction.source_wallet_account_no = current_user.account_number
     @transaction.target_wallet_account_no = current_user.account_number
 
-    if current_user.kind_of?(User)
-      @transaction.user_id = current_user.id
-    end
-    if @transaction.save
-      redirect_to @transaction, notice: 'Withdrawal successful!'
-    else
+    amount_exceeds_balance = Transaction.amount_exceeds_balance(@transaction.amount,current_user)
+
+    if amount_exceeds_balance
+      flash[:alert] = "Amount exceeds your current balance. Please try again."
       render :withdraw_form
+    else
+      if current_user.kind_of?(User)
+        @transaction.user_id = current_user.id
+      end
+      if @transaction.save
+        redirect_to @transaction, notice: 'Withdrawal successful!'
+      else
+        render :withdraw_form
+      end
     end
+
   end
 
   def create
@@ -35,25 +43,29 @@ class TransactionsController < ApplicationController
     source_account = current_user
     target_account_exists = Transaction.account_exists?(target_account_number)
     @target_account = Transaction.find_account(target_account_number)
+    amount_exceeds_balance = Transaction.amount_exceeds_balance(@transaction.amount,current_user)
 
-    if target_account_exists
-      @transaction.target_wallet_account_no = target_account_number
-      @transaction.source_wallet_account_no = source_account.account_number
-      @transaction.transaction_type = :debit
-      if source_account.kind_of?(User)
-        @transaction.user_id = source_account.id
-      end
-      if @transaction.save
-        redirect_to @transaction
+    if amount_exceeds_balance
+      flash[:alert] = "Amount exceeds your current balance. Please try again."
+      render :new
+    else
+      if target_account_exists
+        @transaction.target_wallet_account_no = target_account_number
+        @transaction.source_wallet_account_no = source_account.account_number
+        @transaction.transaction_type = :debit
+        if source_account.kind_of?(User)
+          @transaction.user_id = source_account.id
+        end
+        if @transaction.save
+          redirect_to @transaction
+        else
+          render :new
+        end
       else
+        flash[:alert] = "Account number not found."
         render :new
       end
-    else
-      flash[:alert] = "Account number not found."
-      render :new
     end
-
-
   end
 
   private

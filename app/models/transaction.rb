@@ -7,6 +7,10 @@ class Transaction < ApplicationRecord
 
   validates :amount, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: 10000 }
 
+  def self.amount_exceeds_balance(amount, current_user)
+    return amount > Transaction.calculate_balance_for(current_user)
+  end
+
   def self.account_exists?(account_number)
     return true if User.find_by(account_number: account_number).present?
     false

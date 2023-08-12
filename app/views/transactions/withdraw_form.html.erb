@@ -1,3 +1,7 @@
+<% if flash[:alert] %>
+  <p><%= flash[:alert] %></p>
+<% end %>
+
 <%= form_with model: @transaction, url: withdraw_transactions_path, local: true do |f| %>
   <div>
     <%= f.label :amount %>
