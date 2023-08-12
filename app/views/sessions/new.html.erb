@@ -1,5 +1,15 @@
 <h1>Sign In</h1>
 
+<% if flash[:notice] %>
+  <div class="flash-notice">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+
+<% if flash[:alert] %>
+  <p><%= flash[:alert] %></p>
+<% end %>
+
 <%= form_with(url: session_path, local: true) do |f| %>
   <div class="field">
     <%= f.label :username %>
