@@ -32,6 +32,6 @@ class SessionsController < ApplicationController
 
   private
   def hide_navbar?
-    action_name == "new"
+    %w[new create].include?(action_name)
   end
 end
