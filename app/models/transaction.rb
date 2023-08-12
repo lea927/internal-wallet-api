@@ -1,9 +1,11 @@
 class Transaction < ApplicationRecord
-  attr_accessor :target_account_number, :source_account_number
+  attr_accessor :target_account_number
 
   belongs_to :user, optional: true
 
   enum transaction_type: { credit: 0, debit: 1 }
+
+  validates :amount, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: 10000 }
 
   def self.account_exists?(account_number)
     return true if User.find_by(account_number: account_number).present?

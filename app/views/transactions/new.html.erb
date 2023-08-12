@@ -7,7 +7,7 @@
 <%= form_for @transaction do |f| %>
   <div>
     <%= f.label :amount %>
-    <%= f.number_field :amount %>
+    <%= f.number_field :amount, required: true, min: 0.01, max: 10000, step: 0.01 %>
   </div>
   <div>
     <%= f.label :account_number %>
