@@ -46,7 +46,12 @@ rails s
 
 ## Usage
 ### Signing in
-Upon starting the server, you'll be redirected to the login page to sign into the system. You can use any of the predefined usernames from `user1` to `user10`. The password for all these accounts is `P@ssw0rd`.
+Upon starting the server, you'll be redirected to the login page to sign into the system. You can use any of the predefined usernames from `user1` to `user10`. The password for all these accounts is `P@ssw0rd`. For the corresponding `account_number` details of each user:
+- `user1` has `account_number` '012345678901'
+- `user2` has `account_number` '012345678902'
+- ...
+- `user12` has `account_number` '012345678912'
+
 
 ### Transactions
 Upon logging in, the dashboard presents you with "Send Money" and "Withdraw Money" buttons, allowing you to initiate for each entity.
